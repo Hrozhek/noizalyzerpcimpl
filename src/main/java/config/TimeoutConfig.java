@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class TimeoutConfig {
+
     private final long time;
     private final TimeUnit timeUnit;
 

@@ -9,18 +9,24 @@ import java.util.Objects;
 public class ApplicationConfig {
 
     private final TimeoutConfig writeTimeoutConfig;
+    private final TimeoutConfig updateRate;
     private final ConnectionConfig connectionConfig;
     private final List<AbstractSensorConfig> sensorsConfig;
 
-    public ApplicationConfig(TimeoutConfig writeTimeoutConfig, ConnectionConfig connectionConfig,
-                             List<AbstractSensorConfig> sensorsConfig) {
+    public ApplicationConfig(TimeoutConfig writeTimeoutConfig, TimeoutConfig updateRate,
+                             ConnectionConfig connectionConfig, List<AbstractSensorConfig> sensorsConfig) {
         this.writeTimeoutConfig = writeTimeoutConfig;
+        this.updateRate = updateRate;
         this.connectionConfig = connectionConfig;
         this.sensorsConfig = new ArrayList<>(sensorsConfig);
     }
 
     public TimeoutConfig getWriteTimeout() {
         return writeTimeoutConfig;
+    }
+
+    public TimeoutConfig getUpdateRate() {
+        return updateRate;
     }
 
     public ConnectionConfig getConnection() {

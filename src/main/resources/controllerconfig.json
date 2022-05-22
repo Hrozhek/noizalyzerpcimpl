@@ -5,6 +5,10 @@
     "endpoint" : ""
   },
   "write_timeout" : {
+    "time" : 3,
+    "time_unit" : "Minutes"
+  },
+  "update_rate" : {
     "time" : 1,
     "time_unit" : "Minutes"
   },

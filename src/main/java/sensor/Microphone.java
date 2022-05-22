@@ -1,11 +1,22 @@
 package sensor;
 
+import config.sensor.MicrophoneSensorConfig;
+
 import javax.sound.sampled.*;
 import java.io.ByteArrayOutputStream;
 
 public class Microphone extends AbstractSensor {
 
-    public static void /*todo*/ connect(AudioFormat format, String deviceName) throws LineUnavailableException {
+    private final MicrophoneSensorConfig config;
+
+    public Microphone(int id, MicrophoneSensorConfig config) {
+        super(id);
+        this.config = config;
+    }
+
+    @Override
+    public void /*todo*/ init() {
+        AudioFormat format = config.getFormat();
         TargetDataLine microphone;
         SourceDataLine speakers;
         try {
@@ -42,8 +53,13 @@ public class Microphone extends AbstractSensor {
         }
     }
 
+    @Override
+    public byte[] read() {
+        return null;
+    }
+
     public static void main(String[] args) throws Exception {
         AudioFormat format = new AudioFormat(8000.0f, 16, 1, true, true);
-        connect(format, "");
+//        connect(format, "");
     }
 }
