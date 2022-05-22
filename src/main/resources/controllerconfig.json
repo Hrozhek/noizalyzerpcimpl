@@ -1,0 +1,22 @@
+{
+  "connection" : {
+    "server_url" : "localhost",
+    "server_port" : "",
+    "endpoint" : ""
+  },
+  "write_timeout" : {
+    "time" : 1,
+    "time_unit" : "Minutes"
+  },
+  "sensors" : [
+    {
+      "type" : "MICROPHONE",
+      "format" : "",
+      "name" : "",
+      "read_duration" : {
+        "time" : 3,
+        "time_unit" : "Seconds"
+      }
+    }
+  ]
+}
