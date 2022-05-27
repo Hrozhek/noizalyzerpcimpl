@@ -1,25 +1,31 @@
 {
   "connection" : {
     "server_url" : "localhost",
-    "server_port" : "",
-    "endpoint" : ""
+    "server_port" : "8080",
+    "endpoint" : "noizalyzer"
   },
   "write_timeout" : {
     "time" : 3,
-    "time_unit" : "Minutes"
+    "time_unit" : "MINUTES"
   },
   "update_rate" : {
     "time" : 1,
-    "time_unit" : "Minutes"
+    "time_unit" : "MINUTES"
   },
   "sensors" : [
     {
       "type" : "MICROPHONE",
-      "format" : "",
-      "name" : "",
+      "format" : {
+        "sample_rate" : 8000,
+        "sample_size_in_bits" : 16,
+        "channels" : 1,
+        "signed" : true,
+        "big_endian" : true
+      },
+      "name" : "USB mic",
       "read_duration" : {
         "time" : 3,
-        "time_unit" : "Seconds"
+        "time_unit" : "SECONDS"
       }
     }
   ]

@@ -1,5 +1,6 @@
 package config.sensor;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import config.TimeoutConfig;
 import sensor.SensorType;
 
@@ -11,6 +12,7 @@ public class MicrophoneSensorConfig extends AbstractSensorConfig {
     private final AudioFormat format;
     private final String name;
 
+    @JsonCreator
     public MicrophoneSensorConfig(AudioFormat format, String name, TimeoutConfig readDuration) {
         super(SensorType.MICROPHONE, readDuration);
         this.format = format;

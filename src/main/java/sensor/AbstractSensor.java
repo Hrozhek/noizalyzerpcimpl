@@ -14,5 +14,7 @@ public abstract class AbstractSensor {
 
     public abstract void init();
 
+    public abstract void destroy();
+
     public abstract byte[] read();
 }

@@ -1,5 +1,7 @@
 package config;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import config.sensor.AbstractSensorConfig;
 
 import java.util.ArrayList;
@@ -8,13 +10,24 @@ import java.util.Objects;
 
 public class ApplicationConfig {
 
+    private static final class Token {
+
+        public static final String WRITE_TIMEOUT = "write_timeout";
+        public static final String UPDATE_RATE = "update_rate";
+        public static final String SENSORS = "sensors";
+        public static final String CONNECTION = "connection";
+
+    }
     private final TimeoutConfig writeTimeoutConfig;
     private final TimeoutConfig updateRate;
     private final ConnectionConfig connectionConfig;
     private final List<AbstractSensorConfig> sensorsConfig;
 
-    public ApplicationConfig(TimeoutConfig writeTimeoutConfig, TimeoutConfig updateRate,
-                             ConnectionConfig connectionConfig, List<AbstractSensorConfig> sensorsConfig) {
+    @JsonCreator
+    public ApplicationConfig(@JsonProperty(Token.WRITE_TIMEOUT) TimeoutConfig writeTimeoutConfig,
+                             @JsonProperty(Token.UPDATE_RATE) TimeoutConfig updateRate,
+                             @JsonProperty(Token.CONNECTION) ConnectionConfig connectionConfig,
+                             @JsonProperty(Token.SENSORS) List<AbstractSensorConfig> sensorsConfig) {
         this.writeTimeoutConfig = writeTimeoutConfig;
         this.updateRate = updateRate;
         this.connectionConfig = connectionConfig;

@@ -1,6 +1,7 @@
 package maincycle;
 
 import config.ApplicationConfig;
+import config.ConnectionConfig;
 import config.TimeoutConfig;
 import config.sensor.AbstractSensorConfig;
 import config.sensor.MicrophoneSensorConfig;
@@ -24,6 +25,7 @@ public class MainCycle implements Runnable {
 
     private final Duration writeTimeout;
     private final TimeoutConfig updateRate;
+    private final ConnectionConfig connectionConfig;
     private final ConnectionClient connectionClient;
     private final UUID id;
     private final List<AbstractSensor> sensors = new ArrayList<>();
@@ -35,7 +37,8 @@ public class MainCycle implements Runnable {
     private MainCycle(ApplicationConfig config) {
         writeTimeout = initWriteTimeout(config.getWriteTimeout());
         this.updateRate = config.getUpdateRate();
-        connectionClient = new ConnectionClient(config.getConnection());
+        connectionConfig = config.getConnection();
+        connectionClient = new ConnectionClient(connectionConfig);
         id = connectionClient.initConnection();
         config.getSensors().forEach(this::initSensor);
         lastWritten = Instant.now().minus(writeTimeout);//allow first iteration in any case
@@ -57,13 +60,12 @@ public class MainCycle implements Runnable {
     }
 
     public void start() {
-        initExecutor(updateRate);
+        if (executor == null) {
+            executor = initExecutor(updateRate);
+        }
     }
 
     private ExecutorService initExecutor(TimeoutConfig config) {
-        if (executor != null) {
-            //todo
-        }
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         executorService.scheduleAtFixedRate(this, 0, config.getTime(), config.getTimeUnit());
         return executorService;
@@ -75,9 +77,13 @@ public class MainCycle implements Runnable {
 
     @Override
     public void run() {
-        //check server's messages like ping
+        //todo check server's messages like ping
         if (Instant.now().isAfter(lastWritten.plus(writeTimeout))) {
-            doWebSocketRoutine();
+            try {
+                doWebSocketRoutine();
+            } catch (Exception e) {
+                e.printStackTrace();//todo we are in loop, so
+            }
             lastWritten = Instant.now();
         }
 
@@ -87,7 +93,9 @@ public class MainCycle implements Runnable {
         for (AbstractSensor sensor : sensors) {
             WebSocketClient client = webSocketClients.get(sensor.getId());
             if (client == null || !client.isActive()) {
-                connectionClient.getWsLink();//todo init
+                String ws = connectionClient.getWsLink(id);
+                client = new WebSocketClient(connectionConfig, ws, sensor.getId());
+                webSocketClients.put(sensor.getId(), client);
             }
             byte[] read = sensor.read();
             //todo log
