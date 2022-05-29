@@ -77,7 +77,7 @@ public class MainCycle implements Runnable {
 
     @Override
     public void run() {
-        //todo check server's messages like ping
+        checkServerRequests();
         if (Instant.now().isAfter(lastWritten.plus(writeTimeout))) {
             try {
                 doWebSocketRoutine();
@@ -89,6 +89,10 @@ public class MainCycle implements Runnable {
 
     }
 
+    private void checkServerRequests() {
+        //todo check server requests like
+    }
+
     private void doWebSocketRoutine() {
         for (AbstractSensor sensor : sensors) {
             WebSocketClient client = webSocketClients.get(sensor.getId());
@@ -98,7 +102,7 @@ public class MainCycle implements Runnable {
                 webSocketClients.put(sensor.getId(), client);
             }
             byte[] read = sensor.read();
-            //todo log
+            System.out.printf("bytes read: %d for sensor: %d", read.length, sensor.getId());//todo log
             client.send(read);
         }
 
